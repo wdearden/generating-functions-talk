@@ -1,0 +1,327 @@
+\documentclass{beamer}
+\usetheme{Copenhagen}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+ 
+ 
+%Information to be included in the title page:
+\title{Generating Functions}
+\author{Will Dearden}
+\institute{Uptake}
+\date{2019-02-08}
+ 
+ 
+ 
+\begin{document}
+ 
+\frame{\titlepage}
+ 
+\begin{frame}
+    \frametitle{What is a generating function?}
+    Let $a = a_1, a_2, \ldots $ be a sequence.
+
+    \begin{block}{Definition}
+        The generating function for a sequence $a$ is $$G_a(x) = a_0 + a_1 \cdot x + a_2 \cdot x^2 + \cdots$$
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Why do we care about generating functions?}
+    Working with discrete things is tough.
+    \pause
+    \newline
+    \newline
+    Generating functions allow us to use:
+    \begin{itemize}
+        \item Algebra
+        \item Calculus
+        \item Complex Analysis
+    \end{itemize}
+
+    \pause
+    \quad
+    \newline
+    I will cover the "calculus of generating functions" and how basic operations on generating functions correspond to operations on the sequence itself.
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Fibonacci numbers}
+
+    The Fibonacci numbers are defined by a simple recurrence.
+    $$F_{n + 1} = F_n + F_{n-1} \quad \left(n \geq 1;F_0 = 0;F_1 = 1\right)$$
+
+    \pause
+
+    You might have been taught a closed-form formula for the $n$th Fibonacci number. Maybe you even proved it using induction.
+
+    \pause
+    We're going to discover it using generating functions.
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Fibonacci numbers}
+
+    The generating function for $F$ is $$G_F(x) = F_0 + F_1 \cdot x + F_2 \cdot x^2 + \cdots$$
+
+    \pause
+
+    Let's multiply it by $x$
+
+    \pause
+
+    \begin{align*}
+        x \cdot G_F(x) &= F_0\cdot x + F_1 \cdot x^2 + F_2 \cdot x^3 + \cdots \\
+        &= F_1 \cdot x^2 + F_2 \cdot x^3 + \cdots 
+    \end{align*}
+
+    \pause
+
+    Now by $x^2$
+
+    \pause
+
+    $$x^2 \cdot G_F(x) = F_0\cdot x^2 + F_1 \cdot x^3 + F_2 \cdot x^4 + \cdots$$
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Fibonacci numbers}
+
+    Now we add them together
+
+    \pause
+
+    \begin{align*}
+        x \cdot G_F(x) + x^2 \cdot G_F(x) &= \quad F_1 \cdot x^2 + F_2 \cdot x^3 + \cdots \\
+        &\quad + F_0\cdot x^2 + F_1 \cdot x^3 + F_2 \cdot x^4 + \cdots \\
+        &= (F_1 + F_0) \cdot x^2 + (F_2 + F_1) \cdot x^3 + \cdots \\
+        &= F_2 \cdot x^2 + F_3 \cdot x^3 + \cdots \\
+        &= G_F(x) - x
+    \end{align*}
+
+    \pause
+
+    Solve that equation for $G_F$ and we get
+
+    $$G_F(x) = \frac{x}{1 - x - x^2}$$
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Fibonacci numbers}
+
+    We want to simplify $$\frac{x}{1 - x - x^2}$$ \pause
+
+    Now we're in the realm of algebra. What can we simplify it to? \pause
+
+    You might remember $$\frac{1}{1 - y} = 1 + y + y^2 + y^3 + \cdots $$ \pause
+
+    In other words $$\frac{1}{1 - x}$$ is the generating function for $a = 1, 1, 1, \ldots $.
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Fibonacci numbers}
+
+    So we want the partial fraction decomposition for $$\frac{x}{1 - x - x^2}$$ \pause
+
+    We can use the quadratic formula to factor $1 - x - x^2$.
+
+    $$1 - x - x^2 = (1 - \phi_+ x)(1 - \phi_- x)$$ $$ \phi_{\pm} = \frac{1 \pm \sqrt{5}}{2} \approx 1.618, -0.618$$
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Fibonacci numbers}
+
+    If we do a little bit of algebra we then get
+
+    $$1 - x - x^2 = \frac{1}{\sqrt{5}} \left( \frac{1}{1 - \phi_+ x} - \frac{1}{1 - \phi_- x }\right)$$ \pause
+
+    But we can use the fact that $\frac{1}{1 - y} = 1 + y + y^2 \cdots $ to expand out each of those fractions
+
+    $$\frac{1}{\sqrt{5}} \left(\left(1 + \phi_+ \cdot x + \phi_+^2 \cdot x^2 + \cdots \right) - \left(1 + \phi_- \cdot x + \phi_-^2 \cdot x^2 + \cdots \right)\right)$$
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Fibonacci numbers}
+
+    Now we have an exact formula for the coefficients of $x_n$ so we know $F_n$.
+
+    $$F_n = \frac{1}{\sqrt{5}} \left( \phi_+^n - \phi_-^n\right)$$ \pause
+
+    Since $\phi_-^n$ gets vanishingly small we can also say
+
+    $$F_n \approx 0.447 \cdot 1.618^n$$
+
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Calculus of Generating Functions}
+
+    We used a lot of little tricks there. I'm going to list out a bunch of tricks we can use to work with generating functions.
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Calculus of Generating Functions}
+
+    \begin{block}{Generating functions preserve linearity}
+        $G_{A + B} = G_A + G_B$ \newline
+        $G_{c \cdot A} = c \cdot G_A$ 
+    \end{block}
+
+    \pause
+
+    \begin{block}{Multiplying by $x$ shifts the sequence}
+        $x \cdot G_{[A_{n+1}]} = G_A - A_0$
+    \end{block}
+
+    \begin{align*}
+        x \cdot G_{[A_{n+1}]} &= x \cdot (A_1 + A_2 \cdot x + A_3 \cdot x^2 + \cdots) \\
+        &= A_1 \cdot x + A_2 \cdot x^2 + A_3 \cdot x^3 + \cdots \\
+        &= G_A - A_0
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Calculus of Generating Functions}
+
+    \begin{block}{Taking the derivative multiplies by $n$}
+        $x \cdot G'_A(x) = G_{[n*A_n]}$
+    \end{block}
+
+    \begin{align*}
+        x \cdot G'_A(x) &= x \cdot \frac{d(A_0 + A_1 \cdot x + A_2 \cdot x^2 + A_3 \cdot x^3 + \cdots )}{dx} \\
+        &= x \cdot (A_1 + 2A_2 \cdot x + 3A_3 \cdot x^2 + \cdots ) \\
+        &= A_1 \cdot x + 2A_2 \cdot x^2 + 3A_3 \cdot x^3 + \cdots \\
+        &= G_{[n*A_n]}
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Calculus of Generating Functions}
+
+    Let's define the convolution of sequence. For two sequence $A$ and $B$, $A \ast B$ is defined as
+
+    $$(A \ast B)_n = \sum_{i + j = n} A_i \cdot B_j$$ Then we get another rule.
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Calculus of Generating Functions}
+
+    \begin{block}{Multiplying generating functions takes a convolution}
+        $G_A \cdot G_B = G_{A \ast B}$
+    \end{block}
+
+    \begin{align*}
+        G_A \cdot G_B &= (A_0 + A_1 \cdot x + B_2 \cdot x^2 + \cdots) \\
+        & \quad \cdot (B_0 + B_1 \cdot x + B_2 \cdot x^2 + \cdots) \\
+        &= (A_0 + B_0) + (A_1 \cdot B_0 + A_0 \cdot B_1) \cdot x \\
+        & \quad + (A_2 \cdot B_0 + A_1 \cdot B_1 + A_0 \cdot B_2) \cdot x^2 \\
+        &= G_{A \ast B}
+    \end{align*} \pause
+
+    Let $B = 1, 1, 1, \ldots$. One cool thing to note is that implies $\frac{G_A}{1 - x}$ is the generating function for the partial sums of $A$.
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Another example}
+
+    Note that the previous rule applies to multiplying more than two generating functions together. 
+    \pause
+    \quad
+    \newline
+    \newline
+    Let's try raising a simple generating function to a power. What is $\frac{1}{(1-x)^k}$ the generating function of?
+    \pause
+    \quad
+    \newline
+    \newline
+    $\frac{1}{1 - x}$ is the generating function for $[1]$.
+    \pause
+    \quad
+    \newline
+    \newline
+    Then $\frac{1}{(1-x)^k}$ is the generating function for $$\sum_{n_1 + n_2 + \cdots + n_k = n} 1 \cdot 1 \cdots 1$$
+    \pause
+    In other words $\frac{1}{(1-x)^k}$ is the generating function for the number of ways to have an ordered sequence of length $k$ of nonnegative integers add up to $n$.
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Another example}
+
+    Let's look at all the ways to have 3 nonnegative integers add up to 2. We have 
+
+    \begin{align*}
+        4 &= 2 + 0 + 0 \\
+        &= 1 + 1 + 0 \\
+        &= 1 + 0 + 0 \\
+        &= 0 + 2 + 0 \\
+        &= 0 + 1 + 1 \\
+        &= 0 + 0 + 2
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Another example}
+
+    It turns out this is equivalent to allocating $k-1$ plus signs among $n$ ones. Let the $\star$ stand for a 1.
+
+    \begin{align*}
+        4 = 2 + 0 + 0 &\Leftrightarrow \star \star + +\\
+        = 1 + 1 + 0 &\Leftrightarrow \star + \star +\\
+        = 1 + 0 + 1 &\Leftrightarrow \star + + \star\\
+        = 0 + 2 + 0 &\Leftrightarrow + \star \star + \\
+        = 0 + 1 + 1 &\Leftrightarrow + \star + \star \\
+        = 0 + 0 + 2 &\Leftrightarrow + + \star \star
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Another example}
+
+    So we have $n + k - 1$ slots and we need to choose where to put $k-1$ plus signs. The number of ways to do this is ${n + k - 1 \choose k - 1}$. \pause
+    \quad
+    \newline
+    \newline
+    And just to get this to something simpler it turns out the generating function for ${n \choose k}$ is $\frac{x ^ k}{(1 - x)^{k + 1}}$.
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Another example}
+
+    What is $\sum_{k=1}^{n} k^2$?
+    \pause
+    \quad
+    \newline
+    \newline
+    Generating function of $[n^2]$ is $\frac{x(1 + x)}{(1 - x)^3}$ by taking the derivative of $\frac{1}{1 - x}$ twice.
+    \pause
+    \quad
+    \newline
+    \newline
+    Divide by $1 - x$ to get the generating function of $\sum_{k=1}^{n} k^2$ is $$\frac{x(1 + x)}{(1 - x)^4} = \frac{x^2}{(1 - x)^4} + \frac{x}{(1 - x)^4}$$
+    \pause
+    Since dividing by $x$ is equivalent to shifting by $n$ and we have the combinatorial generating function from before, we get formula
+    $$\sum_{k=1}^{n} k^2 = {n + 1 \choose 3} + {n + 2 \choose 3} = \frac{n(n + 1)(2n + 1)}{6}$$.
+
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Coin counting}
+
+    Your turn: let's say we have pennies, nickels, dimes, and quarters. What's the generating function for the number of ways to make change for $n$ cents?
+
+\end{frame}
+ 
+\end{document}
